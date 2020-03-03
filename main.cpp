@@ -28,8 +28,8 @@ int main()
 	double yPos = 400;
 
 	double alpha = 0;
-	double x = xPos;
-	double y = yPos;
+	double BeamX = xPos;
+	double BeamY = yPos;
 	bool isShooting = false;
 	//game variables
 	bool key[5] = { false, false, false, false, false }; //holds key clicks
@@ -51,8 +51,8 @@ int main()
 		if (ev.type == ALLEGRO_EVENT_TIMER) {
 
 			alpha += .1;
-			if (x > SCREEN_W) {
-				x = xPos;
+			if (BeamX > SCREEN_W) {
+				BeamX = xPos;
 				alpha = 0;
 			}
 
@@ -74,8 +74,8 @@ int main()
 			if (key[KEY_SPACE]) {
 
 				//HERE'S THE MOST IMPORTANT PART!
-				x += 10;
-				y = 50 * sin(1 * alpha + 0) + yPos + 8;
+				BeamX += 10;
+				BeamY = 200 * sin(1 * alpha + 0) + yPos + 8;
 
 
 				isShooting = true;
@@ -83,7 +83,7 @@ int main()
 			}
 			else {
 				isShooting = false;
-				x = xPos + 25; //resets x position when space isn't pressed
+				BeamX = xPos + 25; //resets x position when space isn't pressed
 				alpha = 0; //resets angle when space isn't pressed
 			}
 
@@ -142,7 +142,7 @@ int main()
 				al_clear_to_color(al_map_rgb(255, 255, 255));
 
 			if (isShooting)
-				al_draw_filled_circle(x, y, 5, al_map_rgb(180, 0, 0)); //draw bullet
+				al_draw_filled_circle(BeamX, BeamY, 5, al_map_rgb(180, 0, 0)); //draw bullet
 
 			al_draw_bitmap(pic, xPos, yPos, NULL);
 
