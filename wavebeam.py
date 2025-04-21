@@ -24,7 +24,7 @@ pic = pygame.image.load("spaceship.png").convert_alpha()
 # Position of player
 xPos = 50
 yPos = 400
-alpha = 0
+angle = 0
 BeamX = xPos
 BeamY = yPos
 isShooting = False
@@ -33,11 +33,17 @@ isShooting = False
 key = [False, False, False, False, False]
 running = True
 
-while running:
+while running: #GAME LOOP##################################################
+    
+    #input section-----------------------------------
+    clock.tick(FPS)
+    
+    #event queue
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
 
+        #keyboard input
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_UP:
                 key[KEY_UP] = True
@@ -64,11 +70,12 @@ while running:
             elif event.key == pygame.K_ESCAPE:
                 running = False
 
-    # Update logic
-    alpha += 0.1
+    #physics section---------------------------------------
+    
+    angle += 0.1
     if BeamX > SCREEN_W:
         BeamX = xPos
-        alpha = 0
+        angle = 0
 
     if not isShooting:
         if key[KEY_UP]:
@@ -81,26 +88,36 @@ while running:
             xPos += 4
 
     if key[KEY_SPACE]:
-        BeamX += 10
-        BeamY = 200 * math.sin(alpha) + yPos + 8
+        #HERES THE MOST IMPORTANT PART!--------------
+        A = 200
+        B = 1
+        C = 0
+        D = yPos
+        
+        BeamX += 10 #handles how fast the beam moves to the right
+        BeamY = A * math.sin(B*(angle-C)) + D #handles the shape of the beam
+        #------------------------------------------
         isShooting = True
     else:
         isShooting = False
         BeamX = xPos + 25
-        alpha = 0
+        angle = 0
 
-    # Drawing
+    # Render Section-----------------------------------------------------------------------
+    #screen.fill((255, 255, 255)) #commented out so we see the path of the beam
+    
     if not isShooting:
         screen.fill((255, 255, 255))  # Clear screen
 
     if isShooting:
-        pygame.draw.circle(screen, (180, 0, 0), (int(BeamX), int(BeamY)), 5)
+        pygame.draw.circle(screen, (180, 0, 0), (int(BeamX), int(BeamY)), 5) #draw beam
 
-    screen.blit(pic, (xPos, yPos))
+    screen.blit(pic, (xPos, yPos)) #draw spaceship
+    
     pygame.display.flip()
 
-    clock.tick(FPS)
-
+    
+#end game loop#########################
 pygame.quit()
 
 
